@@ -1,1 +1,6 @@
 *.nupkg
+InnoSetup/
+bin/
+obj/
+Downloads/
+tools/

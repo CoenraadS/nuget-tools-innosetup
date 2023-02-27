@@ -12,29 +12,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: nuget/setup-nuget@v1
 
-    - name: Download Inno Setup installer
-      run: curl -L -o installer.exe http://files.jrsoftware.org/is/6/innosetup-${{ env.INNO_VERSION }}.exe
+    - name: Build
+      run: ./InnoSetup.Cli.build.ps1 -Version ${{ env.INNO_VERSION }} Install-InnoSetup
 
-    - name: Install Inno Setup
-      run: Start-Process ./installer.exe -NoNewWindow -Wait -ArgumentList "/verysilent /allusers /dir=inst"
+    - name: Pack
+      run: ./InnoSetup.Cli.build.ps1 -Version ${{ env.INNO_VERSION }} Pack
 
-    - name: Download encryption module
-      run: curl -L -o inst/ISCrypt.dll https://jrsoftware.org/download.php/iscrypt.dll
-
-    - name: List installed files
-      run: gci inst -Recurse -File
-
-    - name: Build NuGet package
-      run: nuget pack Tools.InnoSetup.nuspec -Verbosity detailed
+    - name: Test
+      run: ./InnoSetup.Cli.build.ps1 -Version ${{ env.INNO_VERSION }} Test
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: nuget-package
-        path: "*.nupkg"
-
+        path: "./nupkg/*.nupkg"
 
   publish:
     name: Publish release to NuGet

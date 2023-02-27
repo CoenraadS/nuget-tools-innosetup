@@ -1,4 +1,4 @@
-(Below is the license for Inno Setup itself. This nuget package and other
+(Below is the license for Inno Setup itself. This package and other
 support files are in the public domain.)
 
 Inno Setup License
